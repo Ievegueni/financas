@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Moeda {
+  AOA
+  USDT
+}
+
+enum TipoCarteira {
+  BANCO
+  WALLET_BINANCE
+  OUTRO
+}
+
+enum TipoMovimento {
+  ENTRADA
+  SAIDA
+}
+
+enum TipoCategoria {
+  ENTRADA
+  SAIDA
+  AMBOS
+}
+
+enum TipoDestino {
+  PESSOA
+  FORNECEDOR
+  CLIENTE
+  CARTEIRA_EXTERNA
+  OUTRO
+}
+
+model User {
+  id           String   @id @default(cuid())
+  nome         String
+  email        String   @unique
+  passwordHash String
+  criadoEm     DateTime @default(now())
+}
+
+model Empresa {
+  id         String      @id @default(cuid())
+  nome       String
+  nif        String?
+  ativa      Boolean     @default(true)
+  carteiras  Carteira[]
+  movimentos Movimento[]
+  categorias Categoria[]
+  destinos   Destino[]
+}
+
+model Carteira {
+  id           String       @id @default(cuid())
+  empresaId    String
+  empresa      Empresa      @relation(fields: [empresaId], references: [id])
+  nome         String // ex.: "BAI Kwanzas", "Binance USDT"
+  tipo         TipoCarteira
+  moeda        Moeda
+  saldoInicial Decimal      @default(0) @db.Decimal(20, 8)
+  ativa        Boolean      @default(true)
+  movimentos   Movimento[]
+
+  @@unique([empresaId, nome])
+}
+
+// FINALIDADE: salários, fornecedor, impostos, venda...
+model Categoria {
+  id         String        @id @default(cuid())
+  empresaId  String
+  empresa    Empresa       @relation(fields: [empresaId], references: [id])
+  nome       String
+  tipo       TipoCategoria @default(AMBOS)
+  ativa      Boolean       @default(true)
+  movimentos Movimento[]
+
+  @@unique([empresaId, nome])
+}
+
+// PARA ONDE foi o valor: pessoa, fornecedor, cliente...
+model Destino {
+  id         String      @id @default(cuid())
+  empresaId  String
+  empresa    Empresa     @relation(fields: [empresaId], references: [id])
+  nome       String
+  tipo       TipoDestino @default(OUTRO)
+  ativo      Boolean     @default(true)
+  movimentos Movimento[]
+
+  @@unique([empresaId, nome])
+}
+
+model Movimento {
+  id              String        @id @default(cuid())
+  empresaId       String
+  empresa         Empresa       @relation(fields: [empresaId], references: [id])
+  carteiraId      String
+  carteira        Carteira      @relation(fields: [carteiraId], references: [id])
+  tipo            TipoMovimento
+  valor           Decimal       @db.Decimal(20, 8) // sempre positivo
+  moeda           Moeda // copiada da carteira
+  taxaCambio      Decimal?      @db.Decimal(20, 8) // AOA por 1 USDT (opcional)
+  categoriaId     String?
+  categoria       Categoria?    @relation(fields: [categoriaId], references: [id])
+  destinoId       String?
+  destino         Destino?      @relation(fields: [destinoId], references: [id])
+  data            DateTime // data do movimento
+  descricao       String?
+  transferenciaId String? // liga as 2 pernas de uma transferência/câmbio
+  criadoEm        DateTime      @default(now())
+  atualizadoEm    DateTime      @updatedAt
+  eliminadoEm     DateTime?
+
+  @@index([empresaId, data])
+  @@index([carteiraId, data])
+  @@index([transferenciaId])
+}
+
+// histórico da taxa USDT→AOA
+model TaxaCambio {
+  id    String   @id @default(cuid())
+  data  DateTime @default(now())
+  valor Decimal  @db.Decimal(20, 8) // AOA por 1 USDT
+}
