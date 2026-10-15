@@ -75,7 +75,7 @@ Legenda: `[ ]` por fazer · `[x]` feito
 
 ## Sprint 5 — Exportação, deploy e backups
 
-- [ ] `GET /exportar/movimentos.xlsx` com os filtros do histórico
+- [x] `GET /exportar/movimentos.xlsx` com os filtros do histórico
 - [ ] `ecosystem.config.js` (PM2), `nginx.conf`, HTTPS com certbot
 - [ ] Build do frontend servido pelo Nginx; `/api` em proxy
 - [ ] `backup.sh` com `pg_dump` diário (cron), retenção 30 dias, cópia fora do VPS

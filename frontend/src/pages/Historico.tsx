@@ -68,7 +68,16 @@ function Historico({ empresaId }: { empresaId: string }) {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-lg font-semibold">Histórico</h1>
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-lg font-semibold">Histórico</h1>
+        <a
+          href={`/api/exportar/movimentos.xlsx?${new URLSearchParams({ empresaId, ...filtros } as Record<string, string>)}`}
+          download
+          className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800"
+        >
+          Exportar Excel
+        </a>
+      </div>
       {cadastros && (
         <FiltrosHistorico
           filtros={filtros}

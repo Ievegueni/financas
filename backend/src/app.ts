@@ -12,6 +12,7 @@ import { categoriaRoutes } from './routes/categorias.js';
 import { dashboardRoutes } from './routes/dashboard.js';
 import { destinoRoutes } from './routes/destinos.js';
 import { empresaRoutes } from './routes/empresas.js';
+import { exportarRoutes } from './routes/exportar.js';
 import { movimentoRoutes } from './routes/movimentos.js';
 import { saldoRoutes } from './routes/saldos.js';
 import { taxaRoutes } from './routes/taxas.js';
@@ -72,6 +73,7 @@ export async function buildApp({ env, db }: AppDeps) {
       await api.register(dashboardRoutes, { prefix: '/dashboard', db });
       await api.register(taxaRoutes, { prefix: '/taxas', db });
       await api.register(transferenciaRoutes, { prefix: '/transferencias', db });
+      await api.register(exportarRoutes, { prefix: '/exportar', db });
     },
     { prefix: '/api' },
   );
