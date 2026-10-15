@@ -38,10 +38,31 @@ export const movimentoCreate = z.object({
 
 export const movimentoUpdate = movimentoCreate.omit({ empresaId: true }).partial();
 
-export const movimentoListQuery = z.object({
+const diaQuery = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Data inválida (aaaa-mm-dd)');
+
+export const periodoQuery = z.object({
   empresaId: z.string().min(1, 'empresaId obrigatório'),
-  limit: z.coerce.number().int().min(1).max(100).default(20),
+  de: diaQuery.optional(),
+  ate: diaQuery.optional(),
 });
+
+// Filtros do histórico (CLAUDE.md §4); reutilizados pela exportação Excel.
+export const movimentoFiltros = periodoQuery.extend({
+  carteiraId: z.string().min(1).optional(),
+  moeda: z.enum(['AOA', 'USDT']).optional(),
+  tipo: z.enum(['ENTRADA', 'SAIDA']).optional(),
+  categoriaId: z.string().min(1).optional(),
+  destinoId: z.string().min(1).optional(),
+  q: z.string().trim().max(100).optional(),
+});
+
+export const movimentoListQuery = movimentoFiltros.extend({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(200).default(50),
+});
+
+export type MovimentoFiltros = z.infer<typeof movimentoFiltros>;
+export type Periodo = z.infer<typeof periodoQuery>;
 
 export type MovimentoCreate = z.infer<typeof movimentoCreate>;
 export type MovimentoUpdate = z.infer<typeof movimentoUpdate>;

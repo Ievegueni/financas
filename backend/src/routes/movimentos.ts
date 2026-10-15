@@ -6,20 +6,11 @@ import {
   atualizarMovimento,
   criarMovimento,
   eliminarMovimento,
-  movimentoInclude,
+  listarMovimentos,
 } from '../services/movimentos.js';
 
 export async function movimentoRoutes(app: FastifyInstance, { db }: { db: PrismaClient }) {
-  // Lista simples dos mais recentes (filtros e paginação completos no Sprint 3).
-  app.get('/', async (request) => {
-    const { empresaId, limit } = movimentoListQuery.parse(request.query);
-    return db.movimento.findMany({
-      where: { empresaId, eliminadoEm: null },
-      orderBy: [{ data: 'desc' }, { criadoEm: 'desc' }],
-      take: limit,
-      include: movimentoInclude,
-    });
-  });
+  app.get('/', async (request) => listarMovimentos(db, movimentoListQuery.parse(request.query)));
 
   app.post('/', async (request, reply) => {
     const mov = await criarMovimento(db, movimentoCreate.parse(request.body));

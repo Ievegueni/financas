@@ -1,6 +1,6 @@
-import type { Movimento, PrismaClient, TipoMovimento } from '@prisma/client';
+import type { Movimento, Prisma, PrismaClient, TipoMovimento } from '@prisma/client';
 import { conflict, HttpError, notFound } from '../lib/errors.js';
-import type { MovimentoCreate, MovimentoUpdate } from '../schemas/movimentos.js';
+import type { MovimentoCreate, MovimentoFiltros, MovimentoUpdate } from '../schemas/movimentos.js';
 
 const invalido = (message: string) => new HttpError(400, message);
 
@@ -76,4 +76,48 @@ export async function eliminarMovimento(db: PrismaClient, id: string) {
   const atual = await obterAtivo(db, id);
   const where = atual.transferenciaId ? { transferenciaId: atual.transferenciaId, eliminadoEm: null } : { id };
   await db.movimento.updateMany({ where, data: { eliminadoEm: new Date() } });
+}
+
+const dia = (v: string) => new Date(`${v}T00:00:00.000Z`);
+
+export function periodoWhere({ de, ate }: { de?: string; ate?: string }): Prisma.MovimentoWhereInput {
+  if (!de && !ate) return {};
+  return { data: { ...(de && { gte: dia(de) }), ...(ate && { lte: dia(ate) }) } };
+}
+
+export function filtrosWhere(f: MovimentoFiltros): Prisma.MovimentoWhereInput {
+  const q = f.q?.trim();
+  return {
+    empresaId: f.empresaId,
+    eliminadoEm: null,
+    ...periodoWhere(f),
+    ...(f.carteiraId && { carteiraId: f.carteiraId }),
+    ...(f.moeda && { moeda: f.moeda }),
+    ...(f.tipo && { tipo: f.tipo }),
+    ...(f.categoriaId && { categoriaId: f.categoriaId }),
+    ...(f.destinoId && { destinoId: f.destinoId }),
+    ...(q && {
+      OR: [
+        { descricao: { contains: q, mode: 'insensitive' } },
+        { categoria: { nome: { contains: q, mode: 'insensitive' } } },
+        { destino: { nome: { contains: q, mode: 'insensitive' } } },
+        { carteira: { nome: { contains: q, mode: 'insensitive' } } },
+      ],
+    }),
+  };
+}
+
+export async function listarMovimentos(db: PrismaClient, { page, limit, ...filtros }: MovimentoFiltros & { page: number; limit: number }) {
+  const where = filtrosWhere(filtros);
+  const [items, total] = await Promise.all([
+    db.movimento.findMany({
+      where,
+      orderBy: [{ data: 'desc' }, { criadoEm: 'desc' }],
+      skip: (page - 1) * limit,
+      take: limit,
+      include: movimentoInclude,
+    }),
+    db.movimento.count({ where }),
+  ]);
+  return { items, total, page, limit };
 }

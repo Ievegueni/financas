@@ -50,9 +50,20 @@ export interface Saldos {
   porMoeda: { moeda: Moeda; saldo: string }[];
 }
 
+export interface Pagina<T> {
+  items: T[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
 export const movimentosApi = {
-  recentes: (empresaId: string, limit = 20) =>
-    api<Movimento[]>(`/movimentos?empresaId=${encodeURIComponent(empresaId)}&limit=${limit}`),
+  list: (filtros: Record<string, string | number | undefined>) => {
+    const params = new URLSearchParams();
+    for (const [k, v] of Object.entries(filtros)) if (v !== undefined && v !== '') params.set(k, String(v));
+    return api<Pagina<Movimento>>(`/movimentos?${params}`);
+  },
+  recentes: (empresaId: string, limit = 20) => movimentosApi.list({ empresaId, limit }).then((r) => r.items),
   create: (empresaId: string, data: MovimentoInput) =>
     api<Movimento>('/movimentos', { method: 'POST', body: JSON.stringify({ ...data, empresaId }) }),
   update: (id: string, data: Partial<MovimentoInput>) =>

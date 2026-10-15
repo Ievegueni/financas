@@ -134,7 +134,7 @@ describe('PATCH / DELETE /movimentos/:id', () => {
     const { req, aoa, base, empresa } = await setup();
     const mov = (await req('POST', '/api/movimentos', { ...base, carteiraId: aoa.id, tipo: 'SAIDA', valor: '1' })).json();
     expect((await req('DELETE', `/api/movimentos/${mov.id}`)).statusCode).toBe(204);
-    expect((await req('GET', `/api/movimentos?empresaId=${empresa.id}`)).json()).toHaveLength(0);
+    expect((await req('GET', `/api/movimentos?empresaId=${empresa.id}`)).json().total).toBe(0);
     expect((await prisma.movimento.findUnique({ where: { id: mov.id } }))?.eliminadoEm).toBeInstanceOf(Date);
     expect((await req('DELETE', `/api/movimentos/${mov.id}`)).statusCode).toBe(404);
     expect((await req('PATCH', `/api/movimentos/${mov.id}`, { valor: '2' })).statusCode).toBe(404);
@@ -160,7 +160,10 @@ describe('PATCH / DELETE /movimentos/:id', () => {
       await req('POST', '/api/movimentos', { ...base, data, carteiraId: aoa.id, tipo: 'SAIDA', valor: '1' });
     }
     const lista = (await req('GET', `/api/movimentos?empresaId=${empresa.id}&limit=2`)).json();
-    expect(lista.map((m: { data: string }) => m.data.slice(0, 10))).toEqual(['2026-10-15', '2026-10-10']);
+    expect(lista).toMatchObject({ total: 3, page: 1, limit: 2 });
+    expect(lista.items.map((m: { data: string }) => m.data.slice(0, 10))).toEqual(['2026-10-15', '2026-10-10']);
+    const p2 = (await req('GET', `/api/movimentos?empresaId=${empresa.id}&limit=2&page=2`)).json();
+    expect(p2.items.map((m: { data: string }) => m.data.slice(0, 10))).toEqual(['2026-10-01']);
   });
 });
 
