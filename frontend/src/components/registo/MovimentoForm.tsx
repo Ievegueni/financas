@@ -4,6 +4,7 @@ import type { Movimento, MovimentoInput, TipoMovimento } from '../../api/movimen
 import { hoje } from '../../lib/date';
 import { formatValor, parseValor } from '../../lib/money';
 import { readStorage, writeStorage } from '../../lib/storage';
+import { CarteiraChips } from '../CarteiraChips';
 import { Button, ErrorText, Field, Input } from '../ui';
 import { SelectComNovo } from './SelectComNovo';
 
@@ -123,23 +124,7 @@ export function MovimentoForm(p: Props) {
         })}
       </div>
 
-      <div className="space-y-1">
-        <span className="text-sm font-medium text-slate-700">Carteira</span>
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Carteira">
-          {ativas.map((c) => (
-            <button
-              key={c.id}
-              type="button"
-              role="radio"
-              aria-checked={c.id === carteiraId}
-              onClick={() => setCarteiraId(c.id)}
-              className={`rounded-full border px-3 py-1.5 text-sm ${c.id === carteiraId ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-300 bg-white text-slate-700'}`}
-            >
-              {c.nome} <span className="opacity-70">{c.moeda}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+      <CarteiraChips label="Carteira" carteiras={ativas} value={carteiraId} onChange={setCarteiraId} />
 
       <Field
         label="Valor"

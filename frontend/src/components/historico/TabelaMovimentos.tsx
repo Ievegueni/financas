@@ -17,13 +17,15 @@ export function TabelaMovimentos({ movimentos, onEditar }: Props) {
       <ul className="divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white md:hidden">
         {movimentos.map((m) => (
           <li key={m.id}>
-            <button type="button" onClick={() => onEditar(m)} disabled={!!m.transferenciaId} className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left">
+            <button type="button" onClick={() => onEditar(m)} className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left">
               <span className="min-w-0">
-                <span className="block truncate text-sm">{[m.categoria?.nome, m.destino?.nome].filter(Boolean).join(' · ') || 'Sem categoria'}</span>
+                <span className="block truncate text-sm">{m.transferenciaId
+                    ? `Transferência ${m.tipo === 'SAIDA' ? '(saída)' : '(entrada)'}`
+                    : [m.categoria?.nome, m.destino?.nome].filter(Boolean).join(' · ') || 'Sem categoria'}</span>
                 <span className="block truncate text-xs text-slate-500">
                   {formatData(m.data)} · {m.carteira.nome}
                   {m.descricao ? ` · ${m.descricao}` : ''}
-                  {m.transferenciaId ? ' · transferência' : ''}
+                  {m.taxaCambio ? ` · taxa ${formatValor(m.taxaCambio)}` : ''}
                 </span>
               </span>
               <span className={`shrink-0 text-sm font-semibold tabular-nums ${corValor(m)}`}>
@@ -51,15 +53,15 @@ export function TabelaMovimentos({ movimentos, onEditar }: Props) {
             {movimentos.map((m) => (
               <tr
                 key={m.id}
-                onClick={() => !m.transferenciaId && onEditar(m)}
-                className={m.transferenciaId ? 'text-slate-500' : 'cursor-pointer hover:bg-slate-50'}
+                onClick={() => onEditar(m)}
+                className={`cursor-pointer hover:bg-slate-50 ${m.transferenciaId ? 'text-slate-500' : ''}`}
               >
                 <td className="whitespace-nowrap px-3 py-2 tabular-nums">{formatData(m.data)}</td>
                 <td className="px-3 py-2">{m.carteira.nome}</td>
                 <td className="px-3 py-2">{m.categoria?.nome ?? '—'}</td>
                 <td className="px-3 py-2">{m.destino?.nome ?? '—'}</td>
                 <td className="max-w-[16rem] truncate px-3 py-2 text-slate-600">
-                  {m.transferenciaId ? 'Transferência' : (m.descricao ?? '')}
+                  {m.transferenciaId ? ['Transferência', m.descricao].filter(Boolean).join(' · ') : (m.descricao ?? '')}
                 </td>
                 <td className={`whitespace-nowrap px-3 py-2 text-right font-semibold tabular-nums ${corValor(m)}`}>
                   {sinal(m)}

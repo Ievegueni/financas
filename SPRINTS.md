@@ -61,13 +61,13 @@ Legenda: `[ ]` por fazer · `[x]` feito
 
 ## Sprint 4 — Transferências e câmbio
 
-- [ ] `POST /transferencias` (2 movimentos ligados por `transferenciaId`)
-- [ ] Suporte a câmbio USDT↔AOA com taxa guardada
-- [ ] Suporte a transferência entre empresas
-- [ ] Eliminar uma perna elimina a outra (transação)
-- [ ] Ecrã Transferência / Câmbio
-- [ ] Excluir transferências internas dos totais de "entradas/saídas" do dashboard (ou mostrá-las à parte)
-- [ ] Testes: câmbio, eliminação ligada, dashboard sem dupla contagem
+- [x] `POST /transferencias` (2 movimentos ligados por `transferenciaId`)
+- [x] Suporte a câmbio USDT↔AOA com taxa guardada
+- [x] Suporte a transferência entre empresas
+- [x] Eliminar uma perna elimina a outra (transação)
+- [x] Ecrã Transferência / Câmbio
+- [x] Excluir transferências internas dos totais de "entradas/saídas" do dashboard (ou mostrá-las à parte)
+- [x] Testes: câmbio, eliminação ligada, dashboard sem dupla contagem
 
 **Aceitação:** converter USDT em Kwanzas atualiza os dois saldos e não conta como receita nem despesa.
 

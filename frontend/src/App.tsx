@@ -8,6 +8,7 @@ import { DefinicoesPage } from './pages/Definicoes';
 import { HistoricoPage } from './pages/Historico';
 import { LoginPage } from './pages/Login';
 import { RegistoPage } from './pages/Registo';
+import { TransferenciaPage } from './pages/Transferencia';
 
 export function App() {
   return (
@@ -24,6 +25,7 @@ export function App() {
               }
             >
               <Route path="/" element={<RegistoPage />} />
+              <Route path="/transferencia" element={<TransferenciaPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/historico" element={<HistoricoPage />} />
               <Route path="/definicoes" element={<DefinicoesPage />} />

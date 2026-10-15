@@ -4,6 +4,7 @@ import { useEmpresa } from '../lib/empresa';
 
 const links = [
   { to: '/', label: 'Registar' },
+  { to: '/transferencia', label: 'Transferir' },
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/historico', label: 'Histórico' },
   { to: '/definicoes', label: 'Definições' },

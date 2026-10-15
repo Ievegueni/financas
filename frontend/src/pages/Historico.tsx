@@ -4,6 +4,7 @@ import { carteirasApi, categoriasApi, destinosApi } from '../api/cadastros';
 import { movimentosApi, type Movimento, type Pagina } from '../api/movimentos';
 import { CHAVES_FILTRO, FiltrosHistorico, type Filtros } from '../components/historico/Filtros';
 import { TabelaMovimentos } from '../components/historico/TabelaMovimentos';
+import { TransferenciaInfo } from '../components/historico/TransferenciaInfo';
 import { MovimentoForm } from '../components/registo/MovimentoForm';
 import { Button, ErrorText } from '../components/ui';
 import { useEmpresa } from '../lib/empresa';
@@ -106,33 +107,47 @@ function Historico({ empresaId }: { empresaId: string }) {
         <div className="fixed inset-0 z-20 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setEditar(null)}>
           <div
             role="dialog"
-            aria-label="Editar movimento"
+            aria-label={editar.transferenciaId ? 'Transferência' : 'Editar movimento'}
             className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-white p-4 sm:rounded-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="mb-3 text-lg font-semibold">Editar movimento</h2>
-            <MovimentoForm
-              key={editar.id}
-              empresaId={empresaId}
-              carteiras={carteiras.itens!}
-              categorias={categorias.itens!}
-              destinos={destinos.itens!}
-              inicial={editar}
-              onCadastroCriado={async () => {
-                await Promise.all([categorias.recarregar(), destinos.recarregar()]);
-              }}
-              onSubmit={async (input) => {
-                await movimentosApi.update(editar.id, input);
-                setEditar(null);
-                await carregar();
-              }}
-              onCancel={() => setEditar(null)}
-              onDelete={async () => {
-                await movimentosApi.remove(editar.id);
-                setEditar(null);
-                await carregar();
-              }}
-            />
+            {editar.transferenciaId ? (
+              <TransferenciaInfo
+                movimento={editar}
+                onCancel={() => setEditar(null)}
+                onDelete={async () => {
+                  await movimentosApi.remove(editar.id);
+                  setEditar(null);
+                  await carregar();
+                }}
+              />
+            ) : (
+              <>
+                <h2 className="mb-3 text-lg font-semibold">Editar movimento</h2>
+                <MovimentoForm
+                  key={editar.id}
+                  empresaId={empresaId}
+                  carteiras={carteiras.itens!}
+                  categorias={categorias.itens!}
+                  destinos={destinos.itens!}
+                  inicial={editar}
+                  onCadastroCriado={async () => {
+                    await Promise.all([categorias.recarregar(), destinos.recarregar()]);
+                  }}
+                  onSubmit={async (input) => {
+                    await movimentosApi.update(editar.id, input);
+                    setEditar(null);
+                    await carregar();
+                  }}
+                  onCancel={() => setEditar(null)}
+                  onDelete={async () => {
+                    await movimentosApi.remove(editar.id);
+                    setEditar(null);
+                    await carregar();
+                  }}
+                />
+              </>
+            )}
           </div>
         </div>
       )}
