@@ -7,10 +7,13 @@ Ver `CLAUDE.md` (especificação) e `SPRINTS.md` (plano).
 ```bash
 npm install
 cp backend/.env.example backend/.env   # editar segredos (≥32 caracteres)
-cd backend && npx prisma migrate dev && cd ..
+cd backend && npx prisma migrate dev && npm run db:seed && cd ..
 npm run user:create -- --nome "Nome" --email eu@exemplo.com
 npm run dev:backend    # http://127.0.0.1:3000
 npm run dev:frontend   # http://localhost:5173 (proxy /api → backend)
 ```
 
 Verificações: `npm run lint`, `npm run typecheck`, `npm test`.
+
+Os testes do backend usam uma BD PostgreSQL própria (`financas_test`, ou `TEST_DATABASE_URL`);
+as migrações são aplicadas automaticamente e as tabelas são limpas entre testes.

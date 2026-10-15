@@ -1,17 +1,17 @@
 import { useAuth } from '../lib/auth';
+import { useEmpresa } from '../lib/empresa';
 
 export function HomePage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+  const { empresa } = useEmpresa();
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-6">
-      <header className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold">Olá, {user?.nome}</h1>
-        <button onClick={logout} className="rounded-lg border border-slate-300 px-3 py-2 text-sm">
-          Sair
-        </button>
-      </header>
-      <p className="mt-6 text-slate-600">Sessão iniciada. Os ecrãs chegam nos próximos sprints.</p>
-    </main>
+    <section className="space-y-2">
+      <h1 className="text-lg font-semibold">Olá, {user?.nome}</h1>
+      <p className="text-slate-600">
+        {empresa ? `Empresa: ${empresa.nome}.` : 'Crie uma empresa em Definições.'} O registo de movimentos chega
+        no próximo sprint.
+      </p>
+    </section>
   );
 }

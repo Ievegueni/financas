@@ -21,13 +21,13 @@ Legenda: `[ ]` por fazer · `[x]` feito
 
 ## Sprint 1 — Cadastros
 
-- [ ] CRUD Empresas (2 empresas no seed)
-- [ ] CRUD Carteiras (tipo, moeda, saldo inicial)
-- [ ] CRUD Categorias (por empresa, tipo entrada/saída/ambos)
-- [ ] CRUD Destinos (por empresa, com tipo)
-- [ ] Seed com exemplos: carteiras "Banco AOA" e "Binance USDT"; categorias base (Venda, Serviço, Salários, Fornecedor, Impostos, Outros)
-- [ ] Seletor de empresa no topo (persistente)
-- [ ] Ecrã de Definições
+- [x] CRUD Empresas (2 empresas no seed)
+- [x] CRUD Carteiras (tipo, moeda, saldo inicial)
+- [x] CRUD Categorias (por empresa, tipo entrada/saída/ambos)
+- [x] CRUD Destinos (por empresa, com tipo)
+- [x] Seed com exemplos: carteiras "Banco AOA" e "Binance USDT"; categorias base (Venda, Serviço, Salários, Fornecedor, Impostos, Outros)
+- [x] Seletor de empresa no topo (persistente)
+- [x] Ecrã de Definições
 
 **Aceitação:** configuro as duas empresas com as suas carteiras, categorias e destinos.
 
