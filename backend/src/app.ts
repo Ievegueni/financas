@@ -2,9 +2,14 @@ import Fastify from 'fastify';
 import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
 import rateLimit from '@fastify/rate-limit';
+import type { PrismaClient } from '@prisma/client';
 import type { Env } from './lib/env.js';
+import { errorHandler } from './lib/error-handler.js';
 import { authRoutes, SESSION_COOKIE } from './routes/auth.js';
-import type { UserStore } from './services/auth.js';
+import { carteiraRoutes } from './routes/carteiras.js';
+import { categoriaRoutes } from './routes/categorias.js';
+import { destinoRoutes } from './routes/destinos.js';
+import { empresaRoutes } from './routes/empresas.js';
 
 declare module 'fastify' {
   interface FastifyContextConfig {
@@ -21,7 +26,7 @@ declare module '@fastify/jwt' {
 
 export interface AppDeps {
   env: Pick<Env, 'JWT_SECRET' | 'COOKIE_SECRET' | 'NODE_ENV'>;
-  db: UserStore;
+  db: PrismaClient;
 }
 
 export async function buildApp({ env, db }: AppDeps) {
@@ -29,6 +34,8 @@ export async function buildApp({ env, db }: AppDeps) {
     logger: env.NODE_ENV === 'test' ? false : { level: env.NODE_ENV === 'production' ? 'info' : 'debug' },
     trustProxy: env.NODE_ENV === 'production', // atrás do Nginx
   });
+
+  app.setErrorHandler(errorHandler);
 
   await app.register(cookie, { secret: env.COOKIE_SECRET });
   await app.register(jwt, {
@@ -50,6 +57,10 @@ export async function buildApp({ env, db }: AppDeps) {
   await app.register(
     async (api) => {
       await api.register(authRoutes, { prefix: '/auth', db, secureCookie: env.NODE_ENV === 'production' });
+      await api.register(empresaRoutes, { prefix: '/empresas', db });
+      await api.register(carteiraRoutes, { prefix: '/carteiras', db });
+      await api.register(categoriaRoutes, { prefix: '/categorias', db });
+      await api.register(destinoRoutes, { prefix: '/destinos', db });
     },
     { prefix: '/api' },
   );

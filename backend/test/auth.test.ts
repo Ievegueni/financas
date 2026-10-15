@@ -1,15 +1,14 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import type { FastifyInstance } from 'fastify';
-import type { User } from '@prisma/client';
+import type { PrismaClient, User } from '@prisma/client';
 import { buildApp } from '../src/app.js';
 import { loadEnv } from '../src/lib/env.js';
 import { hashPassword } from '../src/lib/password.js';
-import type { UserStore } from '../src/services/auth.js';
 
 const PASSWORD = 'password-segura-123';
 let user: User;
 
-function fakeDb(): UserStore {
+function fakeDb(): PrismaClient {
   return {
     user: {
       findUnique: async ({
@@ -25,7 +24,7 @@ function fakeDb(): UserStore {
         return Object.fromEntries(Object.entries(user).filter(([k]) => select[k as keyof User]));
       },
     },
-  } as unknown as UserStore;
+  } as unknown as PrismaClient;
 }
 
 async function newApp(): Promise<FastifyInstance> {
