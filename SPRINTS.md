@@ -35,12 +35,12 @@ Legenda: `[ ]` por fazer · `[x]` feito
 
 ## Sprint 2 — Registo de movimentos e saldos
 
-- [ ] `POST /movimentos` com todas as validações (CLAUDE.md §3)
-- [ ] Moeda derivada da carteira
-- [ ] `GET /saldos` (por carteira e por moeda)
-- [ ] Ecrã **Registo rápido** (mobile-first), com criação inline de categoria/destino
-- [ ] Editar e eliminar (soft delete)
-- [ ] Testes: cálculo de saldo, validações
+- [x] `POST /movimentos` com todas as validações (CLAUDE.md §3)
+- [x] Moeda derivada da carteira
+- [x] `GET /saldos` (por carteira e por moeda)
+- [x] Ecrã **Registo rápido** (mobile-first), com criação inline de categoria/destino
+- [x] Editar e eliminar (soft delete)
+- [x] Testes: cálculo de saldo, validações
 
 **Aceitação:** registo uma entrada em USDT e uma saída em AOA em menos de 15 segundos cada; os saldos batem certo.
 

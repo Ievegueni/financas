@@ -3,7 +3,7 @@ import { useAuth } from '../lib/auth';
 import { useEmpresa } from '../lib/empresa';
 
 const links = [
-  { to: '/', label: 'Início' },
+  { to: '/', label: 'Registar' },
   { to: '/definicoes', label: 'Definições' },
 ];
 

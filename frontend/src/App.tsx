@@ -4,8 +4,8 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider } from './lib/auth';
 import { EmpresaProvider } from './lib/empresa';
 import { DefinicoesPage } from './pages/Definicoes';
-import { HomePage } from './pages/Home';
 import { LoginPage } from './pages/Login';
+import { RegistoPage } from './pages/Registo';
 
 export function App() {
   return (
@@ -21,7 +21,7 @@ export function App() {
                 </EmpresaProvider>
               }
             >
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<RegistoPage />} />
               <Route path="/definicoes" element={<DefinicoesPage />} />
             </Route>
           </Route>
