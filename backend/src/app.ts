@@ -15,6 +15,7 @@ import { empresaRoutes } from './routes/empresas.js';
 import { movimentoRoutes } from './routes/movimentos.js';
 import { saldoRoutes } from './routes/saldos.js';
 import { taxaRoutes } from './routes/taxas.js';
+import { transferenciaRoutes } from './routes/transferencias.js';
 
 declare module 'fastify' {
   interface FastifyContextConfig {
@@ -70,6 +71,7 @@ export async function buildApp({ env, db }: AppDeps) {
       await api.register(saldoRoutes, { prefix: '/saldos', db });
       await api.register(dashboardRoutes, { prefix: '/dashboard', db });
       await api.register(taxaRoutes, { prefix: '/taxas', db });
+      await api.register(transferenciaRoutes, { prefix: '/transferencias', db });
     },
     { prefix: '/api' },
   );

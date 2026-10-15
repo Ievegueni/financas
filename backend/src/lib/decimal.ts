@@ -5,3 +5,4 @@ Prisma.Decimal.set({ toExpNeg: -40, toExpPos: 40 });
 
 export const Decimal = Prisma.Decimal;
 export type Decimal = Prisma.Decimal;
+export type DecimalValue = Prisma.Decimal.Value;

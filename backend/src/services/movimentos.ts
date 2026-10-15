@@ -58,7 +58,7 @@ async function obterAtivo(db: PrismaClient, id: string) {
 
 export async function atualizarMovimento(db: PrismaClient, id: string, input: MovimentoUpdate) {
   const atual = await obterAtivo(db, id);
-  if (atual.transferenciaId) throw conflict('Este movimento faz parte de uma transferência; edite a transferência.');
+  if (atual.transferenciaId) throw conflict('Este movimento faz parte de uma transferência; elimine-a e registe de novo.');
 
   const alvo: Alvo = {
     empresaId: atual.empresaId,
