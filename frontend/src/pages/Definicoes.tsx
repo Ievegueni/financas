@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { CarteirasSection } from '../components/definicoes/Carteiras';
 import { CategoriasSection } from '../components/definicoes/Categorias';
 import { DestinosSection } from '../components/definicoes/Destinos';
 import { EmpresasSection } from '../components/definicoes/Empresas';
+import { TaxasSection } from '../components/definicoes/Taxas';
 import { useEmpresa } from '../lib/empresa';
 
 const TABS = {
@@ -10,13 +12,16 @@ const TABS = {
   categorias: 'Categorias',
   destinos: 'Destinos',
   empresas: 'Empresas',
+  taxa: 'Taxa USDT→AOA',
 } as const;
 type Tab = keyof typeof TABS;
 
 export function DefinicoesPage() {
-  const [tab, setTab] = useState<Tab>('carteiras');
+  const [params] = useSearchParams();
+  const inicial = params.get('tab');
+  const [tab, setTab] = useState<Tab>(inicial && inicial in TABS ? (inicial as Tab) : 'carteiras');
   const { empresa } = useEmpresa();
-  const precisaEmpresa = tab !== 'empresas';
+  const precisaEmpresa = tab !== 'empresas' && tab !== 'taxa';
 
   return (
     <div className="space-y-4">
@@ -41,6 +46,7 @@ export function DefinicoesPage() {
       )}
 
       {tab === 'empresas' && <EmpresasSection />}
+      {tab === 'taxa' && <TaxasSection />}
       {precisaEmpresa && !empresa && (
         <p className="text-sm text-slate-500">Crie ou ative uma empresa no separador Empresas.</p>
       )}

@@ -48,12 +48,12 @@ Legenda: `[ ]` por fazer · `[x]` feito
 
 ## Sprint 3 — Histórico e dashboard
 
-- [ ] `GET /movimentos` com filtros e paginação
-- [ ] Ecrã Histórico (tabela, filtros, pesquisa)
-- [ ] `GET /dashboard` (totais por moeda, por categoria, por destino, por período)
-- [ ] Ecrã Dashboard (cartões de saldo, entradas vs saídas, top categorias/destinos)
-- [ ] Tabela `TaxaCambio` + `GET/POST /taxas`
-- [ ] Estimativa total em AOA com a taxa mais recente (identificada como estimativa)
+- [x] `GET /movimentos` com filtros e paginação
+- [x] Ecrã Histórico (tabela, filtros, pesquisa)
+- [x] `GET /dashboard` (totais por moeda, por categoria, por destino, por período)
+- [x] Ecrã Dashboard (cartões de saldo, entradas vs saídas, top categorias/destinos)
+- [x] Tabela `TaxaCambio` + `GET/POST /taxas`
+- [x] Estimativa total em AOA com a taxa mais recente (identificada como estimativa)
 
 **Aceitação:** vejo, por empresa e período, quanto entrou, quanto saiu e para onde, em AOA e USDT separados.
 

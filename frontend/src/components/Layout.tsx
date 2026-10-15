@@ -4,6 +4,8 @@ import { useEmpresa } from '../lib/empresa';
 
 const links = [
   { to: '/', label: 'Registar' },
+  { to: '/dashboard', label: 'Dashboard' },
+  { to: '/historico', label: 'Histórico' },
   { to: '/definicoes', label: 'Definições' },
 ];
 
@@ -36,14 +38,14 @@ export function Layout() {
             Sair
           </button>
         </div>
-        <nav className="mx-auto flex max-w-3xl gap-1 px-4 pb-2">
+        <nav className="mx-auto flex max-w-3xl gap-1 overflow-x-auto px-4 pb-2">
           {links.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
               end
               className={({ isActive }) =>
-                `rounded-lg px-3 py-1.5 text-sm ${isActive ? 'bg-slate-900 text-white' : 'text-slate-600'}`
+                `shrink-0 rounded-lg px-3 py-1.5 text-sm ${isActive ? 'bg-slate-900 text-white' : 'text-slate-600'}`
               }
             >
               {l.label}

@@ -3,7 +3,9 @@ import { Layout } from './components/Layout';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { AuthProvider } from './lib/auth';
 import { EmpresaProvider } from './lib/empresa';
+import { DashboardPage } from './pages/Dashboard';
 import { DefinicoesPage } from './pages/Definicoes';
+import { HistoricoPage } from './pages/Historico';
 import { LoginPage } from './pages/Login';
 import { RegistoPage } from './pages/Registo';
 
@@ -22,6 +24,8 @@ export function App() {
               }
             >
               <Route path="/" element={<RegistoPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/historico" element={<HistoricoPage />} />
               <Route path="/definicoes" element={<DefinicoesPage />} />
             </Route>
           </Route>
