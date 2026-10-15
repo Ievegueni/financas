@@ -76,6 +76,8 @@ describe('carteiras', () => {
     const { req, empresa } = await setup();
     const base = { empresaId: empresa.id, nome: 'X', tipo: 'BANCO', moeda: 'AOA' };
     expect((await req('POST', '/api/carteiras', base)).json().saldoInicial).toBe('0');
+    const minimo = await req('POST', '/api/carteiras', { ...base, nome: 'Min', saldoInicial: '0.00000001' });
+    expect(minimo.json().saldoInicial).toBe('0.00000001');
     for (const saldoInicial of ['1,5', '-1', 'abc', '1.123456789', 1.5]) {
       const res = await req('POST', '/api/carteiras', { ...base, nome: `Y${saldoInicial}`, saldoInicial });
       expect(res.statusCode, String(saldoInicial)).toBe(400);

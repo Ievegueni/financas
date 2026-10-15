@@ -3,6 +3,7 @@ import cookie from '@fastify/cookie';
 import jwt from '@fastify/jwt';
 import rateLimit from '@fastify/rate-limit';
 import type { PrismaClient } from '@prisma/client';
+import './lib/decimal.js';
 import type { Env } from './lib/env.js';
 import { errorHandler } from './lib/error-handler.js';
 import { authRoutes, SESSION_COOKIE } from './routes/auth.js';
@@ -10,6 +11,8 @@ import { carteiraRoutes } from './routes/carteiras.js';
 import { categoriaRoutes } from './routes/categorias.js';
 import { destinoRoutes } from './routes/destinos.js';
 import { empresaRoutes } from './routes/empresas.js';
+import { movimentoRoutes } from './routes/movimentos.js';
+import { saldoRoutes } from './routes/saldos.js';
 
 declare module 'fastify' {
   interface FastifyContextConfig {
@@ -61,6 +64,8 @@ export async function buildApp({ env, db }: AppDeps) {
       await api.register(carteiraRoutes, { prefix: '/carteiras', db });
       await api.register(categoriaRoutes, { prefix: '/categorias', db });
       await api.register(destinoRoutes, { prefix: '/destinos', db });
+      await api.register(movimentoRoutes, { prefix: '/movimentos', db });
+      await api.register(saldoRoutes, { prefix: '/saldos', db });
     },
     { prefix: '/api' },
   );
